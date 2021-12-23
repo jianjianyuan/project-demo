@@ -93,7 +93,7 @@ public class FrameworkWebAutoConfiguration implements WebMvcConfigurer {
      * 创建 DemoFilter Bean，演示模式
      */
     @Bean
-    @ConditionalOnProperty(value = "yudao.demo", havingValue = "true")
+    @ConditionalOnProperty(value = "project.demo", havingValue = "true")
     public FilterRegistrationBean<DemoFilter> demoFilter() {
         return createFilterBean(new DemoFilter(), WebFilterOrderEnum.DEMO_FILTER);
     }

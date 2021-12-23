@@ -1,0 +1,3 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  cn.project.demo.framework.security.conf.FrameworkSecurityAutoConfiguration,\
+  cn.project.demo.framework.security.conf.FrameworkWebSecurityConfigurerAdapter

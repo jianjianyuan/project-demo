@@ -1,0 +1,5 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  cn.project.demo.framework.apiLog.conf.FrameworkApiLogAutoConfiguration,\
+  cn.project.demo.framework.jackson.config.FrameworkJacksonAutoConfiguration,\
+  cn.project.demo.framework.swagger.config.FrameworkSwaggerAutoConfiguration,\
+  cn.project.demo.framework.web.conf.FrameworkWebAutoConfiguration

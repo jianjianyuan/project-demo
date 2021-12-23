@@ -46,5 +46,4 @@ public class GlobalResponseBodyHandler implements ResponseBodyAdvice {
         WebFrameworkUtils.setCommonResult(((ServletServerHttpRequest) request).getServletRequest(), (CommonResult<?>) body);
         return body;
     }
-
 }

@@ -15,6 +15,7 @@ import cn.project.demo.framework.web.util.WebFrameworkUtils;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.util.Assert;
 import org.springframework.validation.BindException;
@@ -23,6 +24,7 @@ import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.NoHandlerFoundException;
@@ -97,6 +99,7 @@ public class GlobalExceptionHandler {
      * <p>
      * 例如说，接口上设置了 @RequestParam("xx") 参数，结果并未传递 xx 参数
      */
+    @ResponseStatus(HttpStatus.METHOD_FAILURE)
     @ExceptionHandler(value = MissingServletRequestParameterException.class)
     public CommonResult<?> missingServletRequestParameterExceptionHandler(MissingServletRequestParameterException ex) {
         log.warn("[missingServletRequestParameterExceptionHandler]", ex);
@@ -108,6 +111,7 @@ public class GlobalExceptionHandler {
      * <p>
      * 例如说，接口上设置了 @RequestParam("xx") 参数为 Integer，结果传递 xx 参数类型为 String
      */
+    @ResponseStatus(HttpStatus.METHOD_FAILURE)
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     public CommonResult<?> methodArgumentTypeMismatchExceptionHandler(MethodArgumentTypeMismatchException ex) {
         log.warn("[missingServletRequestParameterExceptionHandler]", ex);
@@ -117,6 +121,7 @@ public class GlobalExceptionHandler {
     /**
      * 处理 SpringMVC 参数校验不正确
      */
+    @ResponseStatus(HttpStatus.METHOD_FAILURE)
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public CommonResult<?> methodArgumentNotValidExceptionExceptionHandler(MethodArgumentNotValidException ex) {
         log.warn("[methodArgumentNotValidExceptionExceptionHandler]", ex);
@@ -128,6 +133,7 @@ public class GlobalExceptionHandler {
     /**
      * 处理 SpringMVC 参数绑定不正确，本质上也是通过 Validator 校验
      */
+    @ResponseStatus(HttpStatus.METHOD_FAILURE)
     @ExceptionHandler(BindException.class)
     public CommonResult<?> bindExceptionHandler(BindException ex) {
         log.warn("[handleBindException]", ex);
@@ -139,6 +145,7 @@ public class GlobalExceptionHandler {
     /**
      * 处理 Validator 校验不通过产生的异常
      */
+    @ResponseStatus(HttpStatus.METHOD_FAILURE)
     @ExceptionHandler(value = ConstraintViolationException.class)
     public CommonResult<?> constraintViolationExceptionHandler(ConstraintViolationException ex) {
         log.warn("[constraintViolationExceptionHandler]", ex);
@@ -149,6 +156,7 @@ public class GlobalExceptionHandler {
     /**
      * 处理 Dubbo Consumer 本地参数校验时，抛出的 ValidationException 异常
      */
+    @ResponseStatus(HttpStatus.METHOD_FAILURE)
     @ExceptionHandler(value = ValidationException.class)
     public CommonResult<?> validationException(ValidationException ex) {
         log.warn("[constraintViolationExceptionHandler]", ex);
@@ -163,6 +171,7 @@ public class GlobalExceptionHandler {
      * 1. spring.mvc.throw-exception-if-no-handler-found 为 true
      * 2. spring.mvc.static-path-pattern 为 /statics/**
      */
+    @ResponseStatus(HttpStatus.METHOD_FAILURE)
     @ExceptionHandler(NoHandlerFoundException.class)
     public CommonResult<?> noHandlerFoundExceptionHandler(NoHandlerFoundException ex) {
         log.warn("[noHandlerFoundExceptionHandler]", ex);
@@ -174,6 +183,7 @@ public class GlobalExceptionHandler {
      * <p>
      * 例如说，A 接口的方法为 GET 方式，结果请求方法为 POST 方式，导致不匹配
      */
+    @ResponseStatus(HttpStatus.METHOD_FAILURE)
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     public CommonResult<?> httpRequestMethodNotSupportedExceptionHandler(HttpRequestMethodNotSupportedException ex) {
         log.warn("[httpRequestMethodNotSupportedExceptionHandler]", ex);
@@ -194,6 +204,7 @@ public class GlobalExceptionHandler {
      * <p>
      * 来源是，使用 @PreAuthorize 注解，AOP 进行权限拦截
      */
+    @ResponseStatus(HttpStatus.FORBIDDEN)
     @ExceptionHandler(value = AccessDeniedException.class)
     public CommonResult<?> accessDeniedExceptionHandler(HttpServletRequest req, AccessDeniedException ex) {
         log.warn("[accessDeniedExceptionHandler][userId({}) 无法访问 url({})]", WebFrameworkUtils.getLoginUserId(req),
@@ -206,6 +217,7 @@ public class GlobalExceptionHandler {
      * <p>
      * 例如说，商品库存不足，用户手机号已存在。
      */
+    @ResponseStatus(HttpStatus.METHOD_FAILURE)
     @ExceptionHandler(value = ServiceException.class)
     public CommonResult<?> serviceExceptionHandler(ServiceException ex) {
         log.info("[serviceExceptionHandler]", ex);
@@ -215,6 +227,7 @@ public class GlobalExceptionHandler {
     /**
      * 处理系统异常，兜底处理所有的一切
      */
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(value = Exception.class)
     public CommonResult<?> defaultExceptionHandler(HttpServletRequest req, Throwable ex) {
         log.error("[defaultExceptionHandler]", ex);

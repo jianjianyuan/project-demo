@@ -12,7 +12,6 @@ import cn.project.demo.framework.common.util.json.JsonUtils;
 import cn.project.demo.framework.common.util.monitor.TracerUtils;
 import cn.project.demo.framework.common.util.servlet.ServletUtils;
 import cn.project.demo.framework.web.util.WebFrameworkUtils;
-import io.github.resilience4j.ratelimiter.RequestNotPermitted;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.exception.ExceptionUtils;
@@ -81,9 +80,9 @@ public class GlobalExceptionHandler {
         if (ex instanceof HttpRequestMethodNotSupportedException) {
             return httpRequestMethodNotSupportedExceptionHandler((HttpRequestMethodNotSupportedException) ex);
         }
-        if (ex instanceof RequestNotPermitted) {
+        /*简单限流if (ex instanceof RequestNotPermitted) {
             return requestNotPermittedExceptionHandler(request, (RequestNotPermitted) ex);
-        }
+        }*/
         if (ex instanceof ServiceException) {
             return serviceExceptionHandler((ServiceException) ex);
         }
@@ -184,11 +183,11 @@ public class GlobalExceptionHandler {
     /**
      * 处理 Resilience4j 限流抛出的异常
      */
-    @ExceptionHandler(value = RequestNotPermitted.class)
+    /*简单限流@ExceptionHandler(value = RequestNotPermitted.class)
     public CommonResult<?> requestNotPermittedExceptionHandler(HttpServletRequest req, RequestNotPermitted ex) {
         log.warn("[requestNotPermittedExceptionHandler][url({}) 访问过于频繁]", req.getRequestURL(), ex);
         return CommonResult.error(GlobalErrorCodeConstants.TOO_MANY_REQUESTS);
-    }
+    }*/
 
     /**
      * 处理 Spring Security 权限不足的异常

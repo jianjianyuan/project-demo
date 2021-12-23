@@ -3,10 +3,10 @@ spring:
     name: demo-user-server
 
   profiles:
-    active: local
+    active: dev
 
-  #  main:
-  #    allow-bean-definition-overriding: true
+  main:
+    allow-bean-definition-overriding: true
 
   # Servlet 配置
   servlet:

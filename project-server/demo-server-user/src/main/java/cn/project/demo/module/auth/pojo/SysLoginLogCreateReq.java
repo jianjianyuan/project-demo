@@ -1,20 +1,29 @@
 package cn.project.demo.module.auth.pojo;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.io.Serializable;
 
 /**
  * 登录日志创建 Request DTO
  */
+@Builder
 @Data
-public class SysLoginLogCreateReqDTO {
+@NoArgsConstructor
+@AllArgsConstructor
+public class SysLoginLogCreateReq implements Serializable {
 
     /**
      * 日志类型
+     *
+     * @see cn.project.demo.module.sys.constants.enums.logger.SysLoginLogTypeEnum
      */
     @NotNull(message = "日志类型不能为空")
     private Integer logType;
@@ -25,9 +34,15 @@ public class SysLoginLogCreateReqDTO {
     private String traceId;
 
     /**
-     * 用户编号
+     * 用户Id
      */
     private Long userId;
+
+    /**
+     * 用户编号
+     */
+    private String userCode;
+
     /**
      * 用户类型
      */

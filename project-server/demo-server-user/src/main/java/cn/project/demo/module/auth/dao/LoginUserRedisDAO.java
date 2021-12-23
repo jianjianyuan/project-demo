@@ -14,7 +14,7 @@ import javax.annotation.Resource;
  * {@link LoginUser} 的 RedisDAO
  */
 @Repository
-public class SysLoginUserCoreRedisDAO {
+public class LoginUserRedisDAO {
 
     @Resource
     private StringRedisTemplate stringRedisTemplate;
@@ -22,14 +22,16 @@ public class SysLoginUserCoreRedisDAO {
     @Resource
     private SecurityProperties securityProperties;
 
-    public LoginUser get(String sessionId) {
+    public LoginUser getBySessionId(String sessionId) {
         String redisKey = formatKey(sessionId);
         return JsonUtils.parseObject(stringRedisTemplate.opsForValue().get(redisKey), LoginUser.class);
     }
 
-    public void set(String sessionId, LoginUser loginUser) {
+    public void save(String sessionId, LoginUser loginUser) {
         String redisKey = formatKey(sessionId);
-        stringRedisTemplate.opsForValue().set(redisKey, JsonUtils.toJsonString(loginUser),
+        stringRedisTemplate.opsForValue().set(
+                redisKey,
+                JsonUtils.toJsonString(loginUser),
                 securityProperties.getSessionTimeout());
     }
 

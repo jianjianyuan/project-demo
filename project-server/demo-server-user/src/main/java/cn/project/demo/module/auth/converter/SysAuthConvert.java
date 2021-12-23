@@ -11,12 +11,13 @@ import org.mapstruct.factory.Mappers;
 public interface SysAuthConvert {
 
     SysAuthConvert INSTANCE = Mappers.getMapper(SysAuthConvert.class);
-
-    @Mapping(source = "mobile", target = "username")
+    @Mapping(source = "nickname", target = "username")
     LoginUser convert0(SystemUser bean);
 
-    default LoginUser convert(SystemUser bean) {
+    default LoginUser convertToLoginUser(SystemUser bean) {
         // 目的，为了设置 UserTypeEnum.MEMBER.getValue()
-        return convert0(bean).setUserType(UserTypeEnum.MEMBER.getSymbol());
+        LoginUser loginUser = convert0(bean);
+        loginUser.setUserType(UserTypeEnum.MEMBER.getSymbol());
+        return loginUser;
     }
 }

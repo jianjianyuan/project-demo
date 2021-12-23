@@ -2,7 +2,7 @@ package cn.project.demo.module.auth.service;
 
 
 import cn.project.demo.framework.security.service.SecurityAuthFrameworkService;
-import cn.project.demo.module.auth.pojo.SysAuthLoginReqVO;
+import cn.project.demo.module.auth.pojo.UserCodeLoginReq;
 
 import javax.validation.Valid;
 
@@ -14,13 +14,13 @@ import javax.validation.Valid;
 public interface SysAuthService extends SecurityAuthFrameworkService {
 
     /**
-     * 手机 + 密码登录
+     * 用户编码 + 密码登录
      *
      * @param reqVO     登录信息
      * @param userIp    用户 IP
      * @param userAgent 用户 UA
      * @return 身份令牌，使用 JWT 方式
      */
-    String login(@Valid SysAuthLoginReqVO reqVO, String userIp, String userAgent);
+    String userCodeLogin(@Valid UserCodeLoginReq reqVO, String userIp, String userAgent);
 
 }

@@ -10,7 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.*;
 
 /**
- * 登录用户信息
+ * 登录用户信息 redis存储
  */
 @Data
 public class LoginUser implements UserDetails {
@@ -37,6 +37,10 @@ public class LoginUser implements UserDetails {
      * 最后更新时间
      */
     private Date updateTime;
+    /**
+     * 用户编码
+     */
+    private String userCode;
     /**
      * 用户名
      */

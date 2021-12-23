@@ -1,6 +1,5 @@
 package cn.project.demo.module.auth.service.impl;
 
-import cn.hutool.core.lang.Assert;
 import cn.project.demo.framework.common.constants.enums.PlainOrdinaryStatusEnum;
 import cn.project.demo.framework.common.constants.enums.UserTypeEnum;
 import cn.project.demo.framework.common.exception.util.ServiceExceptionUtil;
@@ -9,11 +8,11 @@ import cn.project.demo.framework.common.util.servlet.ServletUtils;
 import cn.project.demo.framework.security.pojo.LoginUser;
 import cn.project.demo.module.auth.constants.SysErrorCodeConstants;
 import cn.project.demo.module.auth.converter.SysAuthConvert;
-import cn.project.demo.module.auth.pojo.SysAuthLoginReqVO;
-import cn.project.demo.module.auth.pojo.SysLoginLogCreateReqDTO;
+import cn.project.demo.module.auth.pojo.SysLoginLogCreateReq;
+import cn.project.demo.module.auth.pojo.UserCodeLoginReq;
 import cn.project.demo.module.auth.service.SysAuthService;
-import cn.project.demo.module.auth.service.SysLoginLogCoreService;
-import cn.project.demo.module.auth.service.SysUserSessionCoreService;
+import cn.project.demo.module.auth.service.SystemLoginLogService;
+import cn.project.demo.module.auth.service.SystemUserSessionService;
 import cn.project.demo.module.sys.constants.enums.logger.SysLoginLogTypeEnum;
 import cn.project.demo.module.sys.constants.enums.logger.SysLoginResultEnum;
 import cn.project.demo.module.user.entity.SystemUser;
@@ -40,93 +39,88 @@ import java.util.Objects;
 @Service
 @Slf4j
 public class SysAuthServiceImpl implements SysAuthService {
-
     @Resource
     @Lazy // 延迟加载，因为存在相互依赖的问题
     private AuthenticationManager authenticationManager;
-
     @Resource
     private SystemUserService systemUserService;
-
     @Resource
-    private SysLoginLogCoreService loginLogCoreService;
-
+    private SystemLoginLogService systemLoginLogService;
     @Resource
-    private SysUserSessionCoreService userSessionCoreService;
-
+    private SystemUserSessionService systemLoginSessionService;
 
     private static final UserTypeEnum userTypeEnum = UserTypeEnum.MEMBER;
 
+    /**
+     * security认证基础方法
+     */
     @Override
-    public UserDetails loadUserByUsername(String mobile) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String userCode) throws UsernameNotFoundException {
         // 获取 username 对应的 SysUserDO
-        SystemUser user = systemUserService.getUserByMobile(mobile);
+        SystemUser user = systemUserService.getUserByUserCode(userCode);
         if (user == null) {
-            throw new UsernameNotFoundException(mobile);
+            throw new UsernameNotFoundException(userCode);
         }
         // 创建 LoginUser 对象
-        return SysAuthConvert.INSTANCE.convert(user);
+        return SysAuthConvert.INSTANCE.convertToLoginUser(user);
     }
 
     @Override
-    public String login(SysAuthLoginReqVO reqVO, String userIp, String userAgent) {
-        // 使用手机 + 密码，进行登录。
-        LoginUser loginUser = this.login0(reqVO.getMobile(), reqVO.getPassword());
-
+    public String userCodeLogin(UserCodeLoginReq reqVO, String userIp, String userAgent) {
+        // 用户编码 + 密码 登录
+        LoginUser loginUser = sysInnerLogin(reqVO.getUserCode(), reqVO.getPassword());
         // 缓存登录用户到 Redis 中，返回 sessionId 编号
-        return userSessionCoreService.createUserSession(loginUser, userIp, userAgent);
+        return systemLoginSessionService.createUserSession(loginUser, userIp, userAgent);
     }
 
-    private LoginUser login0(String username, String password) {
+    private LoginUser sysInnerLogin(String userCode, String password) {
         final SysLoginLogTypeEnum logTypeEnum = SysLoginLogTypeEnum.LOGIN_USERNAME;
-        // 用户验证
         Authentication authentication;
         try {
             // 调用 Spring Security 的 AuthenticationManager#authenticate(...) 方法，使用账号密码进行认证
             // 在其内部，会调用到 loadUserByUsername 方法，获取 User 信息
-            authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
+            authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userCode, password));
         } catch (BadCredentialsException badCredentialsException) {
-            this.createLoginLog(username, logTypeEnum, SysLoginResultEnum.BAD_CREDENTIALS);
+            this.createLoginLog(userCode, logTypeEnum, SysLoginResultEnum.BAD_CREDENTIALS);
             throw ServiceExceptionUtil.exception(SysErrorCodeConstants.AUTH_LOGIN_BAD_CREDENTIALS);
         } catch (DisabledException disabledException) {
-            this.createLoginLog(username, logTypeEnum, SysLoginResultEnum.USER_DISABLED);
+            this.createLoginLog(userCode, logTypeEnum, SysLoginResultEnum.USER_DISABLED);
             throw ServiceExceptionUtil.exception(SysErrorCodeConstants.AUTH_LOGIN_USER_DISABLED);
         } catch (AuthenticationException authenticationException) {
-            log.error("[login0][username({}) 发生未知异常]", username, authenticationException);
-            this.createLoginLog(username, logTypeEnum, SysLoginResultEnum.UNKNOWN_ERROR);
+            log.error("[login0][username({}) 发生未知异常]", userCode, authenticationException);
+            this.createLoginLog(userCode, logTypeEnum, SysLoginResultEnum.UNKNOWN_ERROR);
             throw ServiceExceptionUtil.exception(SysErrorCodeConstants.AUTH_LOGIN_FAIL_UNKNOWN);
         }
         // 登录成功的日志
-        Assert.notNull(authentication.getPrincipal(), "Principal 不会为空");
-        this.createLoginLog(username, logTypeEnum, SysLoginResultEnum.SUCCESS);
+        this.createLoginLog(userCode, logTypeEnum, SysLoginResultEnum.SUCCESS);
         return (LoginUser) authentication.getPrincipal();
     }
 
-    private void createLoginLog(String mobile, SysLoginLogTypeEnum logTypeEnum, SysLoginResultEnum loginResult) {
+    private void createLoginLog(String userCode, SysLoginLogTypeEnum logTypeEnum, SysLoginResultEnum loginResult) {
         // 获得用户
-        SystemUser user = systemUserService.getUserByMobile(mobile);
+        SystemUser systemUser = systemUserService.getUserByUserCode(userCode);
         // 插入登录日志
-        SysLoginLogCreateReqDTO reqDTO = new SysLoginLogCreateReqDTO();
-        reqDTO.setLogType(logTypeEnum.getType());
-        reqDTO.setTraceId(TracerUtils.getTraceId());
-        if (user != null) {
-            reqDTO.setUserId(user.getId());
-        }
-        reqDTO.setUsername(mobile);
-        reqDTO.setUserAgent(ServletUtils.getUserAgent());
-        reqDTO.setUserIp(ServletUtils.getClientIP());
-        reqDTO.setResult(loginResult.getResult());
-        loginLogCoreService.createLoginLog(reqDTO);
+        SysLoginLogCreateReq logCreateReq = SysLoginLogCreateReq.builder()
+                .logType(logTypeEnum.getType())
+                .traceId(TracerUtils.getTraceId())
+                .userId(Objects.isNull(systemUser) ? null : systemUser.getId())
+                .userCode(Objects.isNull(systemUser) ? null : systemUser.getUserCode())
+                .username(Objects.isNull(systemUser) ? null : systemUser.getNickname())
+                .userAgent(ServletUtils.getUserAgent())
+                .userIp(ServletUtils.getClientIP())
+                .result(loginResult.getResult())
+                .build();
+        systemLoginLogService.createLoginLog(logCreateReq);
         // 更新最后登录时间
-        if (user != null && Objects.equals(SysLoginResultEnum.SUCCESS.getResult(), loginResult.getResult())) {
-            systemUserService.updateUserLogin(user.getId(), ServletUtils.getClientIP());
+        if (Objects.nonNull(systemUser) && Objects.equals(SysLoginResultEnum.SUCCESS.getResult(), loginResult.getResult())) {
+            systemUserService.updateUserLogin(systemUser.getId(), ServletUtils.getClientIP());
         }
     }
 
     @Override
     public LoginUser verifyTokenAndRefresh(String token) {
         // 获得 LoginUser
-        LoginUser loginUser = userSessionCoreService.getLoginUser(token);
+        LoginUser loginUser = systemLoginSessionService.getLoginUser(token);
         if (loginUser == null) {
             return null;
         }
@@ -138,7 +132,7 @@ public class SysAuthServiceImpl implements SysAuthService {
     private void refreshLoginUserCache(String token, LoginUser loginUser) {
         // 每 1/3 的 Session 超时时间，刷新 LoginUser 缓存
         if (System.currentTimeMillis() - loginUser.getUpdateTime().getTime() <
-                userSessionCoreService.getSessionTimeoutMillis() / 3) {
+                systemLoginSessionService.getSessionTimeoutMillis() / 3) {
             return;
         }
 
@@ -149,7 +143,7 @@ public class SysAuthServiceImpl implements SysAuthService {
         }
 
         // 刷新 LoginUser 缓存
-        userSessionCoreService.refreshUserSession(token, loginUser);
+        systemLoginSessionService.refreshUserSession(token, loginUser);
     }
 
     @Override
@@ -164,24 +158,24 @@ public class SysAuthServiceImpl implements SysAuthService {
         this.createLoginLog(user.getMobile(), SysLoginLogTypeEnum.LOGIN_MOCK, SysLoginResultEnum.SUCCESS);
 
         // 创建 LoginUser 对象
-        return SysAuthConvert.INSTANCE.convert(user);
+        return SysAuthConvert.INSTANCE.convertToLoginUser(user);
     }
 
     @Override
     public void logout(String token) {
         // 查询用户信息
-        LoginUser loginUser = userSessionCoreService.getLoginUser(token);
+        LoginUser loginUser = systemLoginSessionService.getLoginUser(token);
         if (loginUser == null) {
             return;
         }
         // 删除 session
-        userSessionCoreService.deleteUserSession(token);
+        systemLoginSessionService.deleteUserSession(token);
         // 记录登出日志
         this.createLogoutLog(loginUser.getId(), loginUser.getUsername());
     }
 
     private void createLogoutLog(Long userId, String username) {
-        SysLoginLogCreateReqDTO reqDTO = new SysLoginLogCreateReqDTO();
+        SysLoginLogCreateReq reqDTO = new SysLoginLogCreateReq();
         reqDTO.setLogType(SysLoginLogTypeEnum.LOGOUT_SELF.getType());
         reqDTO.setTraceId(TracerUtils.getTraceId());
         reqDTO.setUserId(userId);
@@ -190,7 +184,6 @@ public class SysAuthServiceImpl implements SysAuthService {
         reqDTO.setUserAgent(ServletUtils.getUserAgent());
         reqDTO.setUserIp(ServletUtils.getClientIP());
         reqDTO.setResult(SysLoginResultEnum.SUCCESS.getResult());
-        loginLogCoreService.createLoginLog(reqDTO);
+        systemLoginLogService.createLoginLog(reqDTO);
     }
-
 }

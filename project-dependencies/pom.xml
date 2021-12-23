@@ -263,7 +263,11 @@
                 <artifactId>demo-spring-boot-starter-mybatis</artifactId>
                 <version>${revision}</version>
             </dependency>
-
+            <dependency>
+                <groupId>org.example</groupId>
+                <artifactId>demo-spring-boot-starter-security</artifactId>
+                <version>${revision}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 </project>

@@ -1,14 +1,10 @@
 package cn.project.demo.module.auth.service;
 
-
 import cn.project.demo.framework.security.pojo.LoginUser;
+import cn.project.demo.module.auth.entity.SystemUserSession;
+import com.baomidou.mybatisplus.extension.service.IService;
 
-/**
- * 在线用户 Session Core Service 接口
- *
- * @author 芋道源码
- */
-public interface SysUserSessionCoreService {
+public interface SystemUserSessionService extends IService<SystemUserSession> {
 
     /**
      * 创建在线用户 Session
@@ -21,12 +17,12 @@ public interface SysUserSessionCoreService {
     String createUserSession(LoginUser loginUser, String userIp, String userAgent);
 
     /**
-     * 刷新在线用户 Session 的更新时间
+     * 获得 Session 编号对应的在线用户
      *
      * @param sessionId Session 编号
-     * @param loginUser 登录用户
+     * @return 在线用户
      */
-    void refreshUserSession(String sessionId, LoginUser loginUser);
+    LoginUser getLoginUser(String sessionId);
 
     /**
      * 删除在线用户 Session
@@ -36,18 +32,17 @@ public interface SysUserSessionCoreService {
     void deleteUserSession(String sessionId);
 
     /**
-     * 获得 Session 编号对应的在线用户
+     * 刷新在线用户 Session 的更新时间
      *
      * @param sessionId Session 编号
-     * @return 在线用户
+     * @param loginUser 登录用户
      */
-    LoginUser getLoginUser(String sessionId);
+    void refreshUserSession(String sessionId, LoginUser loginUser);
 
     /**
      * 获得 Session 超时时间，单位：毫秒
      *
-     * @return 超时时间
+     * @return 配置文件中的session超时时间
      */
     Long getSessionTimeoutMillis();
-
 }

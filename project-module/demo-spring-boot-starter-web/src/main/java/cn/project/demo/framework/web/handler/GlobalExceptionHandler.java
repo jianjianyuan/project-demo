@@ -279,5 +279,4 @@ public class GlobalExceptionHandler {
         errorLog.setUserIp(ServletUtil.getClientIP(request));
         errorLog.setExceptionTime(new Date());
     }
-
 }

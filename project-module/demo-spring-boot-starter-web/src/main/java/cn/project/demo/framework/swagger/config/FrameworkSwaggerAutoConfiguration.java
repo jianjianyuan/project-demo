@@ -1,6 +1,7 @@
 package cn.project.demo.framework.swagger.config;
 
 import com.github.xiaoymin.knife4j.spring.annotations.EnableKnife4j;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -24,6 +25,7 @@ import static springfox.documentation.builders.RequestHandlerSelectors.basePacka
 /**
  * Swagger2 自动配置类
  */
+@Slf4j
 @Configuration
 @EnableSwagger2
 @EnableKnife4j
@@ -42,6 +44,7 @@ public class FrameworkSwaggerAutoConfiguration {
     @Bean
     public Docket createRestApi() {
         SwaggerProperties properties = swaggerProperties();
+        log.info("初始化 swagger 自动配置");
         // 创建 Docket 对象
         return new Docket(DocumentationType.SWAGGER_2)
                 // 用来创建该 API 的基本信息，展示在文档的页面中（自定义展示的信息）

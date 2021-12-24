@@ -30,18 +30,18 @@ public class FrameworkWebAutoConfiguration implements WebMvcConfigurer {
 
     @Resource
     private WebProperties webProperties;
-    /**
-     * 应用名
-     */
+
     @Value("${spring.application.name}")
     private String applicationName;
 
     @Override
     public void configurePathMatch(PathMatchConfigurer configurer) {
         // 设置 API 前缀，仅仅匹配 controller 包下的
-        configurer.addPathPrefix(webProperties.getApiPrefix(), clazz ->
-                clazz.isAnnotationPresent(RestController.class)
-                        && clazz.getPackage().getName().startsWith(webProperties.getControllerPackage())); // 仅仅匹配 controller 包
+        configurer.addPathPrefix(
+                webProperties.getApiPrefix(),
+                clazz ->
+                        clazz.isAnnotationPresent(RestController.class) && clazz.getPackage().getName().startsWith(webProperties.getControllerPackage())
+        ); // 仅仅匹配 controller 包
     }
 
     @Bean

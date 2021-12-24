@@ -19,12 +19,12 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 public class EchoController {
 
-    @ApiOperation("回声测试")
+    @ApiOperation("回声")
     @GetMapping("/echo/{payload}")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "payload", value = "消息", dataTypeClass = String.class)
+            @ApiImplicitParam(name = "payload", value = "消息", dataTypeClass = String.class, paramType = "path")
     })
-    public CommonResult<String> socialAuthRedirect(@PathVariable(value = "payload", required = false) String payload) {
+    public CommonResult<String> echoTest(@PathVariable(value = "payload", required = false) String payload) {
         return CommonResult.success(payload);
     }
 }

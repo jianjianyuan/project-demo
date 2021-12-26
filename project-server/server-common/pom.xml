@@ -14,11 +14,11 @@
     <dependencies>
         <dependency>
             <groupId>org.example</groupId>
-            <artifactId>demo-spring-boot-starter-web</artifactId>
+            <artifactId>framework-module-web</artifactId>
         </dependency>
         <dependency>
             <groupId>org.example</groupId>
-            <artifactId>demo-spring-boot-starter-mybatis</artifactId>
+            <artifactId>framework-module-mybatis</artifactId>
         </dependency>
         <!--<dependency>
             <groupId>org.example</groupId>

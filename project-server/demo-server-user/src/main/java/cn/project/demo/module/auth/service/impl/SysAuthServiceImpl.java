@@ -1,12 +1,12 @@
 package cn.project.demo.module.auth.service.impl;
 
-import cn.project.demo.framework.common.constants.enums.PlainOrdinaryStatusEnum;
-import cn.project.demo.framework.common.constants.enums.UserTypeEnum;
+import cn.project.demo.framework.common.constants.enums.EnableStatusEnum;
 import cn.project.demo.framework.common.exception.util.ServiceExceptionUtil;
 import cn.project.demo.framework.common.util.monitor.TracerUtils;
 import cn.project.demo.framework.common.util.servlet.ServletUtils;
 import cn.project.demo.framework.security.pojo.LoginUser;
 import cn.project.demo.module.auth.constants.SysErrorCodeConstants;
+import cn.project.demo.module.auth.constants.enums.UserTypeEnum;
 import cn.project.demo.module.auth.converter.SysAuthConvert;
 import cn.project.demo.module.auth.pojo.SysLoginLogCreateReq;
 import cn.project.demo.module.auth.pojo.UserCodeLoginReq;
@@ -138,7 +138,7 @@ public class SysAuthServiceImpl implements SysAuthService {
 
         // 重新加载 MbrUserDO 信息
         SystemUser user = systemUserService.getUser(loginUser.getId());
-        if (user == null || PlainOrdinaryStatusEnum.STATUS_ENUM_DISABLE.getSymbol().equals(user.getStatus())) {
+        if (user == null || EnableStatusEnum.STATUS_DISABLE.getStatus().equals(user.getStatus())) {
             throw ServiceExceptionUtil.exception(SysErrorCodeConstants.AUTH_TOKEN_EXPIRED); // 校验 token 时，用户被禁用的情况下，也认为 token 过期，方便前端跳转到登录界面
         }
 

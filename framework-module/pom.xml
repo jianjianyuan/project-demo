@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <groupId>org.example</groupId>
+        <artifactId>project-demo</artifactId>
+        <version>${revision}</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>framework-module</artifactId>
+    <packaging>pom</packaging>
+
+    <description>
+        组件及公共部分
+    </description>
+	<modules>
+		<module>framework-module-common</module>
+		<module>framework-module-web</module>
+		<module>framework-module-redis</module>
+		<module>framework-module-mybatis</module>
+		<module>framework-module-security</module>
+	</modules>
+
+    <dependencyManagement>
+	    <dependencies>
+		    <dependency>
+			    <groupId>org.example</groupId>
+			    <artifactId>framework-module-common</artifactId>
+			    <version>${revision}</version>
+		    </dependency>
+		    <dependency>
+			    <groupId>org.example</groupId>
+			    <artifactId>framework-module-web</artifactId>
+			    <version>${revision}</version>
+		    </dependency>
+		    <dependency>
+			    <groupId>org.example</groupId>
+			    <artifactId>framework-module-security</artifactId>
+			    <version>${revision}</version>
+		    </dependency>
+		    <dependency>
+			    <groupId>org.example</groupId>
+			    <artifactId>framework-module-redis</artifactId>
+			    <version>${revision}</version>
+		    </dependency>
+		    <dependency>
+			    <groupId>org.example</groupId>
+			    <artifactId>framework-module-mybatis</artifactId>
+			    <version>${revision}</version>
+		    </dependency>
+	    </dependencies>
+    </dependencyManagement>
+</project>

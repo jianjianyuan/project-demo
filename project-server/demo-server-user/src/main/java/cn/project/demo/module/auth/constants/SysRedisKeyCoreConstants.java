@@ -1,6 +1,6 @@
 package cn.project.demo.module.auth.constants;
 
-import cn.project.demo.framework.redis.RedisKeyDefine;
+import cn.project.demo.framework.redis.constants.RedisKeyDefine;
 import cn.project.demo.framework.security.pojo.LoginUser;
 import me.zhyd.oauth.model.AuthUser;
 

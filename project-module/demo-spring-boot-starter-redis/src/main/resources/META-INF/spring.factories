@@ -1,3 +1,0 @@
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-  cn.project.demo.framework.redis.conf.FrameworkRedisAutoConfiguration,\
-  cn.project.demo.framework.cache.conf.FrameworkRedisCacheAutoConfiguration

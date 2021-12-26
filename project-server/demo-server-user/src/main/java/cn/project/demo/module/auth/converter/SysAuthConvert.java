@@ -1,7 +1,7 @@
 package cn.project.demo.module.auth.converter;
 
-import cn.project.demo.framework.common.constants.enums.UserTypeEnum;
 import cn.project.demo.framework.security.pojo.LoginUser;
+import cn.project.demo.module.auth.constants.enums.UserTypeEnum;
 import cn.project.demo.module.user.entity.SystemUser;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

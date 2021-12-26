@@ -11,9 +11,9 @@
     <version>${revision}</version>
 
     <modules>
-        <module>project-dependencies</module>
+        <module>framework-dependencies</module>
         <module>project-server</module>
-        <module>project-module</module>
+	    <module>framework-module</module>
     </modules>
 
     <properties>
@@ -29,7 +29,7 @@
         <dependencies>
             <dependency>
                 <groupId>org.example</groupId>
-                <artifactId>project-dependencies</artifactId>
+	            <artifactId>framework-dependencies</artifactId>
                 <version>${revision}</version>
                 <type>pom</type>
                 <scope>import</scope>
@@ -49,11 +49,11 @@
         </pluginManagement>
     </build>
 
-    <repositories>
-        <repository>
-            <id>aliyun</id>
-            <name>aliyun</name>
-            <url>http://maven.aliyun.com/nexus/content/groups/public</url>
-        </repository>
-    </repositories>
+	<!--<repositories>
+		<repository>
+			<id>aliyun</id>
+			<name>aliyun</name>
+			<url>http://maven.aliyun.com/nexus/content/groups/public</url>
+		</repository>
+	</repositories>-->
 </project>

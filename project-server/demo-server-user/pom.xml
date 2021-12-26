@@ -19,11 +19,11 @@
         </dependency>
         <dependency>
             <groupId>org.example</groupId>
-            <artifactId>demo-spring-boot-starter-security</artifactId>
+            <artifactId>framework-module-security</artifactId>
         </dependency>
         <dependency>
             <groupId>org.example</groupId>
-            <artifactId>demo-spring-boot-starter-redis</artifactId>
+            <artifactId>framework-module-redis</artifactId>
         </dependency>
         <dependency>
             <groupId>com.xkcoding.justauth</groupId>
@@ -37,6 +37,7 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>2.3.12.RELEASE</version>
                 <configuration>
                     <fork>true</fork>
                 </configuration>

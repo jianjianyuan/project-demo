@@ -24,13 +24,9 @@ spring:
       fail-on-empty-beans: false # 允许序列化无属性的 Bean
 
   # 静态资源
-  #  mvc:
-  #    static-path-pattern: /static/**
-  web:
-    resources:
-      # knife4j-spring-ui在${project.build.outputDirectory}/META-INF/resources/
-      static-locations: classpath:/META-INF/resources/
-
+  # knife4j-spring-ui在${project.build.outputDirectory}/META-INF/resources/
+  resources:
+    static-locations: classpath:/META-INF/resources/
 # MyBatis Plus 的配置项
 mybatis-plus:
   configuration:

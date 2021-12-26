@@ -1,7 +1,7 @@
 package cn.project.demo.module.log.service.impl;
 
-import cn.project.demo.framework.apiLog.service.dto.ApiErrorLogCreateReqDTO;
-import cn.project.demo.framework.common.constants.enums.ApiErrorLogProcessStatusEnum;
+import cn.project.demo.framework.web.core.constants.enums.ApiErrorLogProcessStatusEnum;
+import cn.project.demo.framework.web.log.service.dto.ApiErrorLogCreateReqDTO;
 import cn.project.demo.module.log.dao.SystemApiErrorLogMapper;
 import cn.project.demo.module.log.entity.SystemApiErrorLog;
 import cn.project.demo.module.log.service.SystemApiErrorLogService;

@@ -1,7 +1,7 @@
 package cn.project.demo.module.user.conf.security;
 
 import cn.project.demo.framework.security.conf.FrameworkWebSecurityConfigurerAdapter;
-import cn.project.demo.framework.web.conf.WebProperties;
+import cn.project.demo.framework.web.core.WebProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;

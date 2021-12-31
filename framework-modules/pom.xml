@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>framework-module</artifactId>
+    <artifactId>framework-modules</artifactId>
     <packaging>pom</packaging>
 
     <description>

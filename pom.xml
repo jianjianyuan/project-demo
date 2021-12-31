@@ -12,8 +12,8 @@
 
     <modules>
         <module>framework-dependencies</module>
-        <module>project-server</module>
-	    <module>framework-module</module>
+        <module>project-servers</module>
+        <module>framework-modules</module>
     </modules>
 
     <properties>

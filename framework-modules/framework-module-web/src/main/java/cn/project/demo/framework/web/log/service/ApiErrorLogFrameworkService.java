@@ -1,7 +1,7 @@
 package cn.project.demo.framework.web.log.service;
 
 
-import cn.project.demo.framework.web.log.service.dto.ApiErrorLogCreateReqDTO;
+import cn.project.demo.framework.web.log.dto.ApiErrorLogCreateReqDTO;
 
 import javax.validation.Valid;
 

@@ -1,4 +1,4 @@
-package cn.project.demo.framework.web.log.service.dto;
+package cn.project.demo.framework.web.log.dto;
 
 import lombok.Data;
 import lombok.experimental.Accessors;

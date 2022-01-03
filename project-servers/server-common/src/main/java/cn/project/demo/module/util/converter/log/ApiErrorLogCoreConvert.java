@@ -1,6 +1,6 @@
 package cn.project.demo.module.util.converter.log;
 
-import cn.project.demo.framework.web.log.service.dto.ApiErrorLogCreateReqDTO;
+import cn.project.demo.framework.web.log.dto.ApiErrorLogCreateReqDTO;
 import cn.project.demo.module.log.entity.SystemApiErrorLog;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;

@@ -1,6 +1,6 @@
 package cn.project.demo.module.log.service.impl;
 
-import cn.project.demo.framework.web.log.service.dto.ApiAccessLogCreateReqDTO;
+import cn.project.demo.framework.web.log.dto.ApiAccessLogCreateReqDTO;
 import cn.project.demo.module.log.dao.SystemApiAccessLogMapper;
 import cn.project.demo.module.log.entity.SystemApiAccessLog;
 import cn.project.demo.module.log.service.SystemApiAccessLogService;

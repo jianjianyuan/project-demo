@@ -10,7 +10,7 @@ import lombok.Getter;
  */
 @Getter
 @AllArgsConstructor
-public enum OperateTypeEnum {
+public enum SystemOperateTypeEnum {
 
     /**
      * 查询

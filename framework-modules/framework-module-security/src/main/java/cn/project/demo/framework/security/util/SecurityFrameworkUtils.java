@@ -101,5 +101,4 @@ public class SecurityFrameworkUtils {
         WebFrameworkUtils.setLoginUserId(request, loginUser.getId());
         WebFrameworkUtils.setLoginUserType(request, loginUser.getUserType());
     }
-
 }

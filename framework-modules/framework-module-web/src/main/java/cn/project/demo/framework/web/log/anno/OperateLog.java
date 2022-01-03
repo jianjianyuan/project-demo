@@ -1,6 +1,6 @@
 package cn.project.demo.framework.web.log.anno;
 
-import cn.project.demo.framework.web.log.constants.enums.OperateTypeEnum;
+import cn.project.demo.framework.web.log.constants.enums.SystemOperateTypeEnum;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
@@ -39,7 +39,7 @@ public @interface OperateLog {
      * <p>
      * 实际并不是数组，因为枚举不能设置 null 作为默认值
      */
-    OperateTypeEnum[] type() default {};
+    SystemOperateTypeEnum[] type() default {};
 
     // ========== 开关字段 ==========
 
@@ -57,5 +57,4 @@ public @interface OperateLog {
      * 是否记录方法结果的数据
      */
     boolean logResultData() default true;
-
 }

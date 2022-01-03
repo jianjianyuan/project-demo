@@ -18,25 +18,28 @@ import javax.servlet.Filter;
 @AutoConfigureAfter(FrameworkWebAutoConfiguration.class)
 public class FrameworkApiLogAutoConfiguration {
 
-    /**
-     * 创建 ApiAccessLogFilter Bean，记录 API 请求日志
-     */
-    @Bean
-    public FilterRegistrationBean<ApiAccessLogFilter> apiAccessLogFilter(WebProperties webProperties,
-                                                                         @Value("${spring.application.name}") String applicationName,
-                                                                         ApiAccessLogFrameworkService apiAccessLogFrameworkService) {
-        ApiAccessLogFilter filter = new ApiAccessLogFilter(webProperties, applicationName, apiAccessLogFrameworkService);
-        return createFilterBean(filter, WebFilterOrderEnum.API_ACCESS_LOG_FILTER);
-    }
+	/**
+	 * 创建 operateLogAspect aop, 获取记录信息
+	 */
+	@Bean
+	public OperateLogAspect operateLogAspect() {
+		return new OperateLogAspect();
+	}
 
-    private static <T extends Filter> FilterRegistrationBean<T> createFilterBean(T filter, Integer order) {
-        FilterRegistrationBean<T> bean = new FilterRegistrationBean<>(filter);
-        bean.setOrder(order);
-        return bean;
-    }
+	/**
+	 * 创建 ApiAccessLogFilter Bean，记录 API 请求日志
+	 */
+	@Bean
+	public FilterRegistrationBean<ApiAccessLogFilter> apiAccessLogFilter(WebProperties webProperties,
+	                                                                     @Value("${spring.application.name}") String applicationName,
+	                                                                     ApiAccessLogFrameworkService apiAccessLogFrameworkService) {
+		ApiAccessLogFilter filter = new ApiAccessLogFilter(webProperties, applicationName, apiAccessLogFrameworkService);
+		return createFilterBean(filter, WebFilterOrderEnum.API_ACCESS_LOG_FILTER);
+	}
 
-    @Bean
-    public OperateLogAspect operateLogAspect() {
-        return new OperateLogAspect();
-    }
+	private static <T extends Filter> FilterRegistrationBean<T> createFilterBean(T filter, Integer order) {
+		FilterRegistrationBean<T> bean = new FilterRegistrationBean<>(filter);
+		bean.setOrder(order);
+		return bean;
+	}
 }

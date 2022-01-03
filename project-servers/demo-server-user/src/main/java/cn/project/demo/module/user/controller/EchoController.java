@@ -7,10 +7,7 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Api(tags = "测试")
 @RestController
@@ -19,12 +16,18 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 public class EchoController {
 
-    @ApiOperation("回声")
-    @GetMapping("/echo/{payload}")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "payload", value = "消息", dataTypeClass = String.class, paramType = "path")
-    })
-    public CommonResult<String> echoTest(@PathVariable(value = "payload", required = false) String payload) {
-        return CommonResult.success(payload);
-    }
+	@ApiOperation("回声测试")
+	@GetMapping("/echo/{payload}")
+	@ApiImplicitParams({
+			@ApiImplicitParam(name = "payload", value = "消息", dataTypeClass = String.class, paramType = "path")
+	})
+	public CommonResult<String> echoTest(@PathVariable(value = "payload", required = false) String payload) {
+		return CommonResult.success(payload);
+	}
+
+	@ApiOperation("操作日志测试")
+	@PostMapping("/operate-log-test")
+	public Object operateLogTest(@RequestBody Object postParams) {
+		return CommonResult.success(postParams);
+	}
 }

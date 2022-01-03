@@ -1,9 +1,6 @@
 package cn.project.demo.module.log.service;
 
-import cn.project.demo.module.log.entity.SystemOperateLog;
-import com.baomidou.mybatisplus.extension.service.IService;
+import cn.project.demo.framework.web.log.service.OperateLogFrameworkService;
 
-public interface SystemOperateLogService extends IService<SystemOperateLog> {
-
-
+public interface SystemOperateLogService extends OperateLogFrameworkService {
 }

@@ -2,13 +2,11 @@ package cn.project.demo.framework.web.core;
 
 import cn.project.demo.framework.web.core.constants.enums.WebFilterOrderEnum;
 import cn.project.demo.framework.web.core.filter.CacheRequestBodyFilter;
-import cn.project.demo.framework.web.core.filter.DemoFilter;
 import cn.project.demo.framework.web.core.filter.XssFilter;
 import cn.project.demo.framework.web.core.handler.GlobalExceptionHandler;
 import cn.project.demo.framework.web.core.handler.GlobalResponseBodyHandler;
 import cn.project.demo.framework.web.log.service.ApiErrorLogFrameworkService;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
@@ -87,15 +85,6 @@ public class FrameworkWebAutoConfiguration implements WebMvcConfigurer {
     @Bean
     public FilterRegistrationBean<XssFilter> xssFilter(XssProperties properties, PathMatcher pathMatcher) {
         return createFilterBean(new XssFilter(properties, pathMatcher), WebFilterOrderEnum.XSS_FILTER);
-    }
-
-    /**
-     * 创建 DemoFilter Bean，演示模式
-     */
-    @Bean
-    @ConditionalOnProperty(value = "project.demo", havingValue = "true")
-    public FilterRegistrationBean<DemoFilter> demoFilter() {
-        return createFilterBean(new DemoFilter(), WebFilterOrderEnum.DEMO_FILTER);
     }
 
     private static <T extends Filter> FilterRegistrationBean<T> createFilterBean(T filter, Integer order) {

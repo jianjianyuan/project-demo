@@ -1,0 +1,51 @@
+server:
+  port: 80
+  undertow:
+    threads:
+      io: 8
+      worker: 64
+    direct-buffers: true
+  compression:
+    enabled: true
+
+spring:
+  main:
+    allow-bean-definition-overriding: true
+  application:
+    name: gateway-service
+  redis:
+    host: 10.10.1.1
+    port: 6379
+    lettuce:
+      pool:
+        max-active: 12
+        max-wait: 1000ms
+        max-idle: 4
+        min-idle: 2
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 10.10.1.1:8848
+        service: ${spring.application.name}
+        group: DEFAULT_GROUP
+        namespace: demo
+      config:
+        server-addr: 10.10.1.1:8848
+        name: ${spring.application.name}
+        group: DEFAULT_GROUP
+        namespace: demo
+        file-extension: yaml
+    gateway:
+      routes:
+        - id: baidu
+          uri: https://www.baidu.com
+          predicates:
+            - Path=/test/duty
+          filters:
+            - StripPrefix=1 # 当前端访问/test/duty -> https://www.baidu.com/duty
+        - id: uer-service
+          uri: lb://user-service
+          predicates:
+            - Path=/user/**
+          filters:
+            - StripPrefix=1

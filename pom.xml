@@ -12,8 +12,11 @@
 
     <modules>
         <module>framework-dependencies</module>
-        <module>project-servers</module>
         <module>framework-modules</module>
+        <module>project-iaas</module>
+        <module>project-paas</module>
+        <module>project-saas</module>
+        <module>project-servers</module>
     </modules>
 
     <properties>

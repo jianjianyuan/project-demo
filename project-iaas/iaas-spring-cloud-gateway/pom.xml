@@ -65,5 +65,10 @@
 			<groupId>com.alibaba.csp</groupId>
 			<artifactId>sentinel-datasource-nacos</artifactId>
 		</dependency>
+
+		<!--<dependency> redisson里面有了
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-actuator</artifactId>
+		</dependency>-->
 	</dependencies>
 </project>

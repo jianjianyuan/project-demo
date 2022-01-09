@@ -35,7 +35,26 @@ spring:
         group: DEFAULT_GROUP
         namespace: demo
         file-extension: yaml
+    sentinel:
+      eager: true
+      transport:
+        dashboard: 10.10.1.1:8858
+      scg: # Sentinel 对 Spring Cloud Gateway 的专属配置项，对应 SentinelGatewayProperties 类
+        order: -2147483648 # 过滤器顺序，默认为 -2147483648 最高优先级
+        fallback:
+          mode: # fallback 模式，目前有三种：response、redirect、空
+          # 专属 response 模式
+          response-status: 429 # 响应状态码，默认为 429
+          response-body: 你被 block 了... # 响应内容，默认为空
+          content-type: application/json # 内容类型，默认为 application/json
+          # 专属 redirect 模式
+          redirect: http://www.baidu.com
     gateway:
+      httpserver:
+        wiretap: true
+      httpclient:
+        compression: true
+        wiretap: true
       routes:
         - id: baidu
           uri: https://www.baidu.com
@@ -49,3 +68,21 @@ spring:
             - Path=/user/**
           filters:
             - StripPrefix=1
+
+--- #日志配置
+logging:
+  level:
+    reactor.netty: DEBUG
+    org.springframework.cloud.gateway: TRACE
+
+--- #actuator配置
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*' # 需要开放的端点。默认值只打开 health 和 info 两个端点。通过设置 * ，可以开放所有端点。
+  endpoint:
+    # Health 端点配置项，对应 HealthProperties 配置类
+    health:
+      enabled: true # 是否开启。默认为 true 开启。
+      show-details: ALWAYS # 何时显示完整的健康信息。默认为 NEVER 都不展示。可选 WHEN_AUTHORIZED 当经过授权的用户；可选 ALWAYS 总是展示。
